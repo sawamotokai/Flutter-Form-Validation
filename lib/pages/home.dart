@@ -23,8 +23,8 @@ class _HomeState extends State<Home> {
   void _submitOrder() {
     if(_formStateKey.currentState.validate()) {
       _formStateKey.currentState.save();
-      print('Order Item: ${order.item}');
-      print('Order Quantity: ${order.quantity}');
+      print('Order Item: ${_order.item}');
+      print('Order Quantity: ${_order.quantity}');
     }
   }
 
@@ -37,7 +37,38 @@ class _HomeState extends State<Home> {
       body: SafeArea(
         child: Column(
           children: <Widget>[
-//            Form(),
+            Form(
+              key: _formStateKey,
+              autovalidate: true,
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  children: <Widget>[
+                    TextFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Espresso',
+                        labelText: 'Item',
+                      ),
+                      validator: (value) => _validateItemRequired(value),
+                      onSaved: (value) => _order.item = value,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        hintText: '4',
+                        labelText: 'Quantity',
+                      ),
+                      validator: (value) => _validateItemCount(value),
+                      onSaved: (value) => _order.quantity = int.tryParse(value),
+                    ),
+                    Divider(),
+                    RaisedButton(
+                      color: Colors.orange,
+                      child: Text("Save"),
+                      onPressed: () => _submitOrder(),
+                    )
+                  ],
+                ),
+              ),),
           ],
         ),
       ),
